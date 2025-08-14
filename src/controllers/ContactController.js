@@ -1,4 +1,4 @@
-const ContactRepository = require('../repositories/contactRepository');
+const ContactRepository = require('../repositories/ContactRepository');
 
 class ContactController{
 

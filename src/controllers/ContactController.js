@@ -10,7 +10,7 @@ class ContactController{
 
         const contacts = await ContactRepository.findAll(sortOrder);
 
-        response.status(200).json(contacts);
+        response.status(200).json({ contacts });
     }
 
     async show(request, response){
@@ -22,7 +22,7 @@ class ContactController{
             return response.status(404).json({error: "Contact not found"});
         }
 
-        response.json(contact);
+        response.json({ contact });
     }
 
     async store(request, response){
@@ -40,7 +40,7 @@ class ContactController{
 
        const contact = await ContactRepository.create({name, email, phone, category_id});
        
-       response.status(201).json(contact);
+       response.status(201).json({ contact });
     }
 
     async update(request, response){
@@ -59,7 +59,7 @@ class ContactController{
 
         const contactUpdated = await ContactRepository.update({id, name, email, phone, category_id});
 
-        response.status(200).json(contactUpdated);
+        response.status(200).json({ contactUpdated });
     }
 
     async delete(request, response){

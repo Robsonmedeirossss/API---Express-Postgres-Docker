@@ -9,7 +9,7 @@ class CategoryController{
 
         const categories = await CategoryRepository.findAll(sortOrder);
 
-        response.json(categories);
+        response.json({ categories });
     }
 
     async show(request, response){
@@ -20,7 +20,7 @@ class CategoryController{
             return response.status(404).json({error: "Category not found"});
         }
 
-        response.json(category);
+        response.json({ category });
     }
 
     async store(request, response){
@@ -30,7 +30,7 @@ class CategoryController{
         }
         const newCategory = await CategoryRepository.create(name);
 
-        response.status(201).json(newCategory);
+        response.status(201).json({ newCategory });
     }
 
     async update(request, response){
@@ -49,14 +49,14 @@ class CategoryController{
 
         const updatedCategory = await CategoryRepository.update(id, name);
 
-        response.status((200)).json(updatedCategory);
+        response.status((200)).json({ updatedCategory });
     }
 
     async delete(request, response){
         const { id } = request.params;
-        const userDeleted = await CategoryRepository.delete(id);
+        await CategoryRepository.delete(id);
 
-        response.status(200).json(userDeleted);
+        response.sendStatus(204);
     }
 }
 

@@ -32,13 +32,22 @@ class ContactController{
             return response.status(400).json({error: "Name is required"});
         }
 
-        const emailAlreadyExists = await ContactRepository.findByEmail(email);
+        let emailAlreadyExists = null;
+
+        if(email){
+            emailAlreadyExists = await ContactRepository.findByEmail(email);
+        }
 
         if(emailAlreadyExists){
             return response.status(400).json({error: 'Email is already in use'});
         }
 
-       const contact = await ContactRepository.create({name, email, phone, category_id});
+       const contact = await ContactRepository.create({
+            name,
+            email: email || null,
+            phone,
+            category_id: category_id || null,
+        });
        
        response.status(201).json({ contact });
     }
@@ -51,13 +60,23 @@ class ContactController{
             return response.status(400).json({error: "Name is required"});
         }
 
-        const emailAlreadyExists = await ContactRepository.findByEmail(email);
+        let emailAlreadyExists = null;
+
+        if(email){
+            emailAlreadyExists = await ContactRepository.findByEmail(email);
+1       }
 
         if(emailAlreadyExists && emailAlreadyExists.id !== id){
             return response.status(400).json({error: "E-mail already been exists"});
         }
 
-        const contactUpdated = await ContactRepository.update({id, name, email, phone, category_id});
+        const contactUpdated = await ContactRepository.update({
+            id, 
+            name, 
+            email: email || null, 
+            phone, 
+            category_id: category_id || null
+        });
 
         response.status(200).json({ contactUpdated });
     }

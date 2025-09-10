@@ -41,39 +41,57 @@ package.json
 - uuid
 
 ## Como rodar o projeto
-1. Instale as dependências:
+
+### Pré-requisitos
+- **Node.js** (v18 ou superior)
+- **Docker** e **Docker Compose**
+
+### Passos para Execução
+
+1. **Clone o repositório:**
+   ```bash
+   git clone https://github.com/seu-usuario/ApiMyContacts.git
+   cd ApiMyContacts
+   ```
+
+2. **Instale as dependências do projeto:**
    ```bash
    npm install
    ```
-
-2. Suba o banco de dados PostgreSQL com Docker Compose (recomendado):
+   *ou, se preferir usar o Yarn:*
    ```bash
-   docker-compose up -d
-   ```
-   Isso criará um container chamado `pg` com as configurações do arquivo `docker-compose.yml`.
-
-   Alternativamente, você pode subir o banco manualmente:
-   ```bash
-   docker run --name pg -e POSTGRES_USER=root -e POSTGRES_PASSWORD=root -e POSTGRES_DB=mycontacts -p 5432:5432 -d postgres
-   docker exec -it pg bash
-   psql -U root
-   # Execute os comandos SQL do arquivo src/database/schema.sql
+   yarn
    ```
 
-3. Configure as variáveis de ambiente no arquivo `.env`:
+3. **Configure as variáveis de ambiente:**
+   Crie um arquivo chamado `.env` na raiz do projeto e preencha com as mesmas credenciais definidas no `docker-compose.yml`:
    ```env
    DB_PASSWORD=root
-   DB_USER=root
+   DB_USER=robson
    DB_HOST=localhost
    DB_PORT=5432
    DB_NAME=mycontacts
    ```
 
-5. Inicie o servidor:
+4. **Inicie o banco de dados com Docker Compose:**
+   Este comando irá criar e iniciar o container do PostgreSQL em segundo plano (`-d`).
+   ```bash
+   docker-compose up -d
+   ```
+
+5. **Crie as tabelas no banco de dados:**
+   Execute o script `schema.sql` dentro do container Docker para criar a estrutura do banco.
+   ```bash
+   docker-compose exec postgres psql -U robson -d mycontacts < src/database/schema.sql
+   ```
+   *Nota: `postgres` é o nome do serviço no `docker-compose.yml`, `-U robson` é o usuário e `-d mycontacts` é o banco de dados.*
+
+6. **Inicie o servidor da aplicação:**
    ```bash
    node src/index.js
    ```
-6. Importante: Verifique se seu container está rodando, utilize o comando: `docker ps`, caso não estiver listado nenhum container, utilize o comando `docker ps -a`, verifique o nome do seu container e rode `docker start nomeDoContainer`, somente depois disso rode o servidor.
+
+Pronto! A API estará rodando em `http://localhost:3001`.
 
 ## Exemplos de uso
 - Listar contatos: `GET /contacts?orderBy=ASC|DESC`
